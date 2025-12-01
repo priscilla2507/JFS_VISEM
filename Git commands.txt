@@ -1,5 +1,27 @@
 Git commands
 
-git init
-git add
-git 
+1.git init
+2.git add .
+3.git commit -m "message"
+4.git remote add origin <remote-url>
+
+Example:
+git remote add origin
+https://github.com/priscilla2507/VI_JFS
+
+5.git push origin main(newer version)
+git push origin master(older version)
+
+6.you can check in remote repository
+
+------------------------------------------
+
+if you can add any files in local repository(folder) or you can change the existing files in local repo
+
+1. git status 
+2. git add .
+3. git commit -m "message"
+4. git push origin main
+
+
+
