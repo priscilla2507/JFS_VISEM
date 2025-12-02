@@ -42,10 +42,10 @@ document.getElementById("regForm").addEventListener("submit", function(e){
 
     let studentName = document.getElementById("name").value;
 
-    let message =
-        "Student Name: " + studentName + "\n\n" +
-        "Selected Subjects:\n- " + selectedSubjects.join("\n- ") + "\n\n" +
-        "Total Fee: ₹" + totalFee;
-
-    alert(message);
+     resultBox.innerHTML = `
+        <h3>Registration Successful</h3>
+        <p><strong>Student Name:</strong> ${studentName}</p>
+        <p><strong>Registered Subjects:</strong><br> ${selectedSubjects.join("<br>")}</p>
+        <p><strong>Total Registration Fee:</strong> ₹${totalFee}</p>
+    `;
 });
