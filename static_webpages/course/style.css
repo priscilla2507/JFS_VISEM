@@ -56,7 +56,7 @@ button:hover {
     background: #005fcc;
 }
 
-/* .result-container {
+.result-container {
     width: 80%;
     margin: 20px auto;
     padding: 15px;
@@ -64,4 +64,4 @@ button:hover {
     border-radius: 8px;
     background-color: #f2faff;
     font-family: Arial, sans-serif;
-} */
+}
