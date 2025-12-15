@@ -1,84 +1,97 @@
 package com.skillnext1;
 
-import java.sql.*;
-import java.util.*;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
-        // change URL/USER/PASSWORD in StudentDAO if needed
-        try (Scanner sc = new Scanner(System.in)) {
-            // load driver (optional with modern JDBC but harmless)
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            System.out.println("MySQL Driver not found");
+        }
+
+        StudentDAO dao = new StudentDAO();
+        Scanner sc = new Scanner(System.in);
+
+        while (true) {
+            System.out.println(
+                "\n1.Insert  2.Update  3.Delete  4.Display  5.Exit  6.Branch Wise Count"
+            );
+            System.out.print("Choose: ");
+            int ch = sc.nextInt();
+
             try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-            } catch (ClassNotFoundException e) {
-                System.out.println("MySQL JDBC driver not found on classpath.");
-            }
+                switch (ch) {
 
-            StudentDAO dao = new StudentDAO();
+                    case 1:
+                        System.out.println("Enter id, name, sem, department:");
+                        int id = sc.nextInt();
+                        String name = sc.next();
+                        int sem = sc.nextInt();
+                        String dept = sc.next();
 
-            while (true) {
-                System.out.println("\n1.Insert  2.Update  3.Delete  4.Display  5.Exit");
-                System.out.print("Choose: ");
-                int ch = sc.nextInt();
-
-                if (ch == 1) {
-                    System.out.println("Enter id, name, sem, dept:");
-                    int id = sc.nextInt();
-                    String name = sc.next();
-                    int sem = sc.nextInt();
-                    String dept = sc.next();
-
-                    Student s = new Student(id, name, sem, dept);
-                    try {
-                        dao.addStudent(s);
+                        dao.addStudent(new Student(id, name, sem, dept));
                         System.out.println("Inserted.");
-                    } catch (SQLException e) {
-                        System.err.println("Insert failed: " + e.getMessage());
-                    }
+                        break;
 
-                } else if (ch == 2) {
-                    System.out.println("Enter id, name, sem, dept to update:");
-                    int id = sc.nextInt();
-                    String name = sc.next();
-                    int sem = sc.nextInt();
-                    String dept = sc.next();
+                    case 2:
+                        System.out.println("Enter id, name, sem, department to update:");
+                        id = sc.nextInt();
+                        name = sc.next();
+                        sem = sc.nextInt();
+                        dept = sc.next();
 
-                    Student s = new Student(id, name, sem, dept);
-                    try {
-                        boolean ok = dao.updateStudent(s);
-                        if (ok) System.out.println("Updated.");
-                        else System.out.println("No row found with id=" + id);
-                    } catch (SQLException e) {
-                        System.err.println("Update failed: " + e.getMessage());
-                    }
+                        if (dao.updateStudent(new Student(id, name, sem, dept)))
+                            System.out.println("Updated.");
+                        else
+                            System.out.println("ID not found.");
+                        break;
 
-                } else if (ch == 3) {
-                    System.out.println("Enter id to delete:");
-                    int id = sc.nextInt();
-                    try {
-                        boolean ok = dao.deleteStudent(id);
-                        if (ok) System.out.println("Deleted.");
-                        else System.out.println("No row found with id=" + id);
-                    } catch (SQLException e) {
-                        System.err.println("Delete failed: " + e.getMessage());
-                    }
+                    case 3:
+                        System.out.println("Enter id to delete:");
+                        id = sc.nextInt();
 
-                } else if (ch == 4) {
-                    try {
+                        if (dao.deleteStudent(id))
+                            System.out.println("Deleted.");
+                        else
+                            System.out.println("ID not found.");
+                        break;
+
+                    case 4:
                         List<Student> list = dao.getAllStudents();
-                        if (list.isEmpty()) {
-                            System.out.println("No students found.");
-                        } else {
-                            for (Student s : list) System.out.println(s);
-                        }
-                    } catch (SQLException e) {
-                        System.err.println("Fetch failed: " + e.getMessage());
-                    }
+                        if (list.isEmpty())
+                            System.out.println("No records found.");
+                        else
+                            list.forEach(System.out::println);
+                        break;
 
-                } else {
-                    System.out.println("Exiting...");
-                    break;
+                    case 5:
+                        System.out.println("Exiting...");
+                        sc.close();
+                        return;
+
+                    
+                    case 6:
+                        Map<String, Integer> map = dao.getBranchWiseCount();
+                        if (map.isEmpty()) {
+                            System.out.println("No records found.");
+                        } else {
+                            System.out.println("\nBranch Wise Student Count:");
+                            for (Map.Entry<String, Integer> e : map.entrySet()) {
+                                System.out.println(e.getKey() + " : " + e.getValue());
+                            }
+                        }
+                        break;
+
+                    default:
+                        System.out.println("Invalid choice");
                 }
+            } catch (SQLException e) {
+                System.err.println("Database error: " + e.getMessage());
             }
         }
     }
