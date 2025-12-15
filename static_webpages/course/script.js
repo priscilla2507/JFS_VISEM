@@ -45,7 +45,9 @@ document.getElementById("regForm").addEventListener("submit", function(e){
      resultBox.innerHTML = `
         <h3>Registration Successful</h3>
         <p><strong>Student Name:</strong> ${studentName}</p>
-        <p><strong>Registered Subjects:</strong><br> ${selectedSubjects.join("<br>")}</p>
+         <p><strong>Registered Subjects:</strong><br> 
+            ${selectedSubjects.map((item, index) => `${index + 1}. ${item}`).join("<br>")}
+        </p>
         <p><strong>Total Registration Fee:</strong> ₹${totalFee}</p>
     `;
 });
