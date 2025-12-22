@@ -5,93 +5,68 @@ import java.util.*;
 
 public class StudentDAO {
 
-    // Correct database
-    private static final String URL =
-            "jdbc:mysql://localhost:3306/skillnext_db1";
+    private static final String URL = "jdbc:mysql://127.0.0.1:3306/skillnext_db";
     private static final String USER = "root";
-    private static final String PASSWORD = "PRISCILLA2006";
+    private static final String PASSWORD = "PRISCILLA2006"; // consider moving to env/config
 
-    private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASSWORD);
-    }
-
-    // INSERT
-    public void addStudent(Student s) throws SQLException {
+    // Add student (into student1)
+    public void addStudent(Student stu) throws SQLException {
         String sql = "INSERT INTO student1 (id, name, sem, department) VALUES (?, ?, ?, ?)";
-        try (Connection con = getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, s.getId());
-            ps.setString(2, s.getName());
-            ps.setInt(3, s.getSem());
-            ps.setString(4, s.getDepartment());
-            ps.executeUpdate();
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, stu.getId());
+            stmt.setString(2, stu.getName());
+            stmt.setInt(3, stu.getSem());
+            stmt.setString(4, stu.getDepartment());
+            int rows = stmt.executeUpdate();
+            System.out.println("Inserted rows: " + rows);
         }
     }
 
-    //  UPDATE
-    public boolean updateStudent(Student s) throws SQLException {
-        String sql = "UPDATE student1 SET name=?, sem=?, department=? WHERE id=?";
-        try (Connection con = getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setString(1, s.getName());
-            ps.setInt(2, s.getSem());
-            ps.setString(3, s.getDepartment());
-            ps.setInt(4, s.getId());
-
-            return ps.executeUpdate() > 0;
-        }
-    }
-
-    // DELETE
-    public boolean deleteStudent(int id) throws SQLException {
-        String sql = "DELETE FROM student1 WHERE id=?";
-        try (Connection con = getConnection();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-
-            ps.setInt(1, id);
-            return ps.executeUpdate() > 0;
-        }
-    }
-
-    // DISPLAY
+    // Fetch all students (from student1)
     public List<Student> getAllStudents() throws SQLException {
+        String sql = "SELECT id, name, sem, department FROM student1";
         List<Student> list = new ArrayList<>();
-        String sql = "SELECT * FROM student1";
-
-        try (Connection con = getConnection();
-             Statement st = con.createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                Student s = new Student(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getInt("sem"),
-                        rs.getString("department")
-                );
+                Student s = new Student();
+                s.setId(rs.getInt("id"));
+                s.setName(rs.getString("name"));
+                s.setSem(rs.getInt("sem"));
+                s.setDepartment(rs.getString("department"));
                 list.add(s);
             }
         }
         return list;
     }
-    //  BRANCH-WISE COUNT
-public Map<String, Integer> getBranchWiseCount() throws SQLException {
 
-    Map<String, Integer> map = new LinkedHashMap<>();
-    String sql = "SELECT department, COUNT(*) AS count FROM student1 GROUP BY department";
-
-    try (Connection con = getConnection();
-         Statement st = con.createStatement();
-         ResultSet rs = st.executeQuery(sql)) {
-
-        while (rs.next()) {
-            String dept = rs.getString("department");
-            int count = rs.getInt("count");
-            map.put(dept, count);
+    // Delete student (from student1)
+    public boolean deleteStudent(int id) throws SQLException {
+        String sql = "DELETE FROM student1 WHERE id = ?";
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            int rows = stmt.executeUpdate();
+            System.out.println("Deleted rows: " + rows);
+            return rows > 0;
         }
     }
-    return map;
-}
+
+    // Update student (in student1)
+    public boolean updateStudent(Student stu) throws SQLException {
+        String sql = "UPDATE student1 SET name = ?, sem = ?, department = ? WHERE id = ?";
+        try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, stu.getName());
+            stmt.setInt(2, stu.getSem());
+            stmt.setString(3, stu.getDepartment());
+            stmt.setInt(4, stu.getId());
+            int rows = stmt.executeUpdate();
+            System.out.println("Updated rows: " + rows);
+            return rows > 0;
+        }
+    }
 }
