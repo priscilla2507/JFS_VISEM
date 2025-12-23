@@ -13,8 +13,8 @@ public class App {
         Transaction tx = session.beginTransaction();
 
         Employee emp = new Employee(
-                "Nandini",
-                "nandini@gmail.com",
+                "Meghana",
+                "meghana@gmail.com",
                 45000
         );
 
