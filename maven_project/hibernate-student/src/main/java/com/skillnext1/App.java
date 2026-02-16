@@ -14,9 +14,9 @@ public class App {
 
         Student stu = new Student(
 
-                "Sathvika",
-                 7,
-                "ECE"
+                "Alice",
+                 5,
+                "CSE-CS"
         );
 
         session.persist(stu);
