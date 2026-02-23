@@ -1,0 +1,87 @@
+Git commands
+
+DAY 1
+
+1.git init
+2.git add .
+3.git commit -m "message"
+4.git remote add origin <remote-url>
+
+Example:
+git remote add origin
+https://github.com/priscilla2507/VI_JFS
+
+5.git push origin main(newer version)
+git push origin master(older version)
+
+6.you can check in remote repository
+
+------------------------------------------
+
+if you can add any files in local repository(folder) or you can change the existing files in local repo
+
+1. git status 
+2. git add .
+3. git commit -m "message"
+4. git push origin main
+
+--------------------------------------------
+DAY 2
+
+1.To remove a empty directory  - rmdir directory_name
+
+2.To remove a directory with content(such as text files in it) - rmdir /s /q directory_name
+
+3.to make a directory - mkdir priscilla
+
+4. to hide a directory - attrib +h priscilla
+
+5. to unhide a directory - attrib -h priscilla
+
+6. to display all the folders or directories - dir
+
+7. to rename a directory - rename previous_name current_name
+rename priscilla pris
+
+8. to display the content of a file - type file_name
+
+9. to display a hidden folder - dir /a:h
+
+10. to create a new text file - notepad filename.txt
+
+11. to forward content from one file to another file
+create a file first : notepad priscilla.txt
+enter some content in it hello jfs
+move the content to another file
+type priscilla.txt>pris.txt (> is used for forwarding the content)
+
+the pris.txt will be created automatically and the content will be moved to it
+
+12. to delete a file - del <filename>
+
+13. to delete all text files - del *.txt
+
+14. the list of wild characters:
+	
+	? - single character
+	* - 0 or more characters
+	
+15. to display all single character named file with extension .txt:dir?.txt
+
+16. to display all files with extension 
+
+17. to retrieve remote repo to local pc : git clone <url>
+
+
+
+
+
+
+
+. cd priscilla
+   notepad hello.txt
+   dir 
+   two other directories are created along with hello.txt
+   .(current directory)
+   . .(parent directory)
+ 
