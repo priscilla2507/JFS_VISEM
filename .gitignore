@@ -1,0 +1,17 @@
+# IDEs
+sts-*
+spring-tools-*
+*.zip
+
+# Java / Maven
+target/
+*.class
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
